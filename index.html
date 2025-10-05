@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kand Sanrakshan - Smart Onion Storage</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --primary: #2e7d32;
+        --primary-dark: #1b5e20;
+        --primary-light: #4caf50;
+        --secondary: #ff9800;
+        --accent: #2196f3;
+        --purple: #9c27b0;
+        --teal: #009688;
+        --text: #333333;
+        --text-light: #666666;
+        --background: #f5f5f5;
+        --white: #ffffff;
+        --gradient: linear-gradient(
+          135deg,
+          var(--primary) 0%,
+          var(--primary-dark) 100%
+        );
+        --gradient-secondary: linear-gradient(
+          135deg,
+          var(--secondary) 0%,
+          #f57c00 100%
+        );
+        --gradient-accent: linear-gradient(
+          135deg,
+          var(--accent) 0%,
+          #0d47a1 100%
+        );
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        --radius: 12px;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--text);
+        background-color: var(--background);
+        overflow-x: hidden;
+      }
+
+      .navbar {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        color: var(--primary) !important;
+        font-size: 1.5rem;
+      }
+
+      .nav-link {
+        font-weight: 500;
+        margin: 0 5px;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-link:hover {
+        background-color: rgba(46, 125, 50, 0.1);
+        color: var(--primary) !important;
+      }
+
+      .btn-primary {
+        background: var(--gradient);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
+      }
+
+      .btn-secondary {
+        background: var(--gradient-secondary);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(255, 152, 0, 0.3);
+      }
+
+      .btn-accent {
+        background: var(--gradient-accent);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 25px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .btn-accent:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(33, 150, 243, 0.3);
+        color: white;
+      }
+
+      .hero {
+        background: var(--gradient);
+        color: white;
+        padding: 150px 0 100px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+        background-size: cover;
+        background-position: center;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+      }
+
+      .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .section-title {
+        font-weight: 700;
+        margin-bottom: 50px;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background: var(--secondary);
+        border-radius: 2px;
+      }
+
+      .card {
+        border: none;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+      }
+
+      .solution-card {
+        text-align: center;
+        padding: 30px 20px;
+        height: 100%;
+        border-top: 5px solid var(--primary);
+      }
+
+      .solution-icon {
+        font-size: 3.5rem;
+        margin-bottom: 20px;
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .impact-card {
+        padding: 25px;
+        border-radius: var(--radius);
+        color: white;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .impact-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .impact-card h3 {
+        position: relative;
+        z-index: 1;
+      }
+
+      .impact-card p {
+        position: relative;
+        z-index: 1;
+      }
+
+      .metric-card {
+        text-align: center;
+        padding: 25px 15px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        background: white;
+        transition: all 0.3s ease;
+      }
+
+      .metric-card:hover {
+        transform: scale(1.05);
+      }
+
+      .metric-value {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 10px 0;
+      }
+
+      .metric-status {
+        display: inline-block;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .status-normal {
+        background-color: #e8f5e9;
+        color: var(--primary);
+      }
+
+      .status-warning {
+        background-color: #fff3e0;
+        color: #ff9800;
+      }
+
+      .status-active {
+        background-color: #e3f2fd;
+        color: var(--accent);
+      }
+
+      .chart-container {
+        background: white;
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        height: 100%;
+      }
+
+      .floating {
+        animation: floating 3s ease-in-out infinite;
+      }
+
+      @keyframes floating {
+        0% {
+          transform: translate(0, 0px);
+        }
+        50% {
+          transform: translate(0, 15px);
+        }
+        100% {
+          transform: translate(0, -0px);
+        }
+      }
+
+      .feature-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.8rem;
+        color: white;
+      }
+
+      .testimonial-card {
+        background: white;
+        border-radius: var(--radius);
+        padding: 30px;
+        box-shadow: var(--shadow);
+        margin: 15px 0;
+      }
+
+      .testimonial-text {
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+
+      .client-info {
+        display: flex;
+        align-items: center;
+      }
+
+      .client-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        background: var(--gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+      }
+
+      .partner-logo {
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: all 0.3s ease;
+      }
+
+      .partner-logo:hover {
+        filter: grayscale(0%);
+        opacity: 1;
+      }
+
+      .footer {
+        background: var(--gradient);
+        color: white;
+        padding: 60px 0 30px;
+      }
+
+      .footer h5 {
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+
+      .footer a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .footer a:hover {
+        color: white;
+        text-decoration: underline;
+      }
+
+      .social-icons a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        text-align: center;
+        line-height: 40px;
+        margin-right: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .social-icons a:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+      }
+
+      .scroll-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--gradient);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        z-index: 1000;
+        opacity: 0;
+        transition: all 0.3s ease;
+      }
+
+      .scroll-top.active {
+        opacity: 1;
+      }
+
+      .modal-content {
+        border-radius: var(--radius);
+        border: none;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      .modal-header {
+        background: var(--gradient);
+        color: white;
+        border-radius: var(--radius) var(--radius) 0 0;
+      }
+
+      .progress {
+        height: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+
+      .progress-bar {
+        border-radius: 5px;
+      }
+
+      .timeline {
+        position: relative;
+        padding-left: 30px;
+      }
+
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: var(--primary-light);
+      }
+
+      .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+      }
+
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -36px;
+        top: 5px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: var(--primary);
+      }
+
+      /* Video Modal Styles */
+      .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+        overflow: hidden;
+      }
+
+      .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1.1rem;
+        }
+
+        .section-title {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <i class="fas fa-seedling me-2"></i>Kand Sanrakshan
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#home">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#problem">Problem</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#solution">Solution</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#impact">Impact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#dashboard">Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item ms-2">
+              <button
+                class="btn btn-outline-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#loginModal"
+              >
+                Login
+              </button>
+            </li>
+            <li class="nav-item ms-2">
+              <button
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#signupModal"
+              >
+                Sign Up
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h1>Shelf Life Up, Waste Down</h1>
+            <p class="lead">
+              Smart Storage Solutions for Onions - Reducing post-harvest losses
+              by 30-40% with IoT-enabled technology
+            </p>
+            <div class="mt-4" style="position: relative; z-index: 1000">
+              <a
+                href="index.html"
+                class="btn btn-secondary btn-lg me-3"
+                style="position: relative; z-index: 1001"
+              >
+                Learn More
+              </a>
+              <button
+                class="btn btn-outline-light btn-lg"
+                data-bs-toggle="modal"
+                data-bs-target="#videoModal"
+                style="position: relative; z-index: 1001"
+              >
+                Watch Demo
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-6 text-center">
+            <img
+              src="Assets/main.png"
+              alt="Onion Storage"
+              class="img-fluid floating"
+              style="max-height: 400px; border-radius: 20px"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Video Modal -->
+    <div
+      class="modal fade"
+      id="videoModal"
+      tabindex="-1"
+      aria-labelledby="videoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="videoModalLabel">
+              Kand Sanrakshan Demo
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-0">
+            <div class="video-container">
+              <!-- Replace with your actual video embed code -->
+              <iframe
+                src="Assets/demo.mp4"
+                title="Kand Sanrakshan Demo Video"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rest of your existing code remains the same -->
+    <!-- Problem Section -->
+    <section id="problem" class="py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">
+          The Onion Storage Problem
+        </h2>
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="card p-4 mb-4">
+              <h4 class="mb-3 text-primary">India's Onion Crisis</h4>
+              <p>
+                India faces significant post-harvest losses in onions due to
+                inadequate storage facilities, leading to:
+              </p>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex align-items-center">
+                  <i class="fas fa-times-circle text-danger me-3"></i>
+                  30-40% onion loss during storage due to sprouting & rotting
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                  <i class="fas fa-dollar-sign text-warning me-3"></i>
+                  Current solutions like silica gel and alumina beads are costly
+                  & unsafe
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                  <i class="fas fa-bolt text-info me-3"></i>
+                  Cold storage has high energy consumption, unaffordable for
+                  small farmers
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                  <i class="fas fa-chart-line text-success me-3"></i>
+                  Seasonal price fluctuations due to supply inconsistencies
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="chart-container">
+              <canvas id="lossChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-5 bg-light">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Our Smart Solution</h2>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-3">
+            <div class="card solution-card">
+              <div class="feature-icon" style="background: var(--gradient)">
+                <i class="fas fa-gas-pump"></i>
+              </div>
+              <h4>Smart Ethylene Monitoring</h4>
+              <p>
+                Real-time sensing with ME3-C₂H₄ sensor connected to Arduino UNO
+                and NodeMCU to prevent premature sprouting and spoilage.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card solution-card">
+              <div
+                class="feature-icon"
+                style="background: var(--gradient-secondary)"
+              >
+                <i class="fas fa-thermometer-half"></i>
+              </div>
+              <h4>Dynamic Temperature Control</h4>
+              <p>
+                PWM-controlled Peltier module adjusts cooling intensity for
+                optimal storage conditions.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card solution-card">
+              <div
+                class="feature-icon"
+                style="background: var(--gradient-accent)"
+              >
+                <i class="fas fa-wind"></i>
+              </div>
+              <h4>Ethylene Absorption</h4>
+              <p>
+                Ultrasonic mist maker creates fog from K₂MnO₄ solution that
+                oxidizes ethylene quickly.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card solution-card">
+              <div
+                class="feature-icon"
+                style="
+                  background: linear-gradient(
+                    135deg,
+                    var(--purple) 0%,
+                    #7b1fa2 100%
+                  );
+                "
+              >
+                <i class="fas fa-satellite-dish"></i>
+              </div>
+              <h4>IoT Integration</h4>
+              <p>
+                MQTT protocol for real-time monitoring & alerts accessible to
+                farmers remotely.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-5">
+          <div class="col-lg-6">
+            <div class="card p-4 h-100">
+              <h4 class="mb-3">How It Works</h4>
+              <div class="timeline">
+                <div class="timeline-item">
+                  <h5>Ethylene Detection</h5>
+                  <p>
+                    Sensors continuously monitor ethylene levels in the storage
+                    environment.
+                  </p>
+                </div>
+                <div class="timeline-item">
+                  <h5>Smart Response</h5>
+                  <p>
+                    When ethylene exceeds threshold, the system activates the
+                    misting mechanism.
+                  </p>
+                </div>
+                <div class="timeline-item">
+                  <h5>Ethylene Neutralization</h5>
+                  <p>
+                    K₂MnO₄ mist oxidizes ethylene gas, preventing sprouting and
+                    rot.
+                  </p>
+                </div>
+                <div class="timeline-item">
+                  <h5>Temperature Control</h5>
+                  <p>
+                    Peltier modules maintain optimal storage temperature with
+                    minimal energy use.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="card p-4 h-100">
+              <h4 class="mb-3">Project Progress</h4>
+              <div class="mb-4">
+                <h6>Hardware Prototype</h6>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-success"
+                    role="progressbar"
+                    style="width: 75%"
+                  >
+                    75%
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <h6>Dashboard Development</h6>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-info"
+                    role="progressbar"
+                    style="width: 90%"
+                  >
+                    90%
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <h6>IoT Integration</h6>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-warning"
+                    role="progressbar"
+                    style="width: 60%"
+                  >
+                    60%
+                  </div>
+                </div>
+              </div>
+              <div class="mb-4">
+                <h6>Field Testing</h6>
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-primary"
+                    role="progressbar"
+                    style="width: 40%"
+                  >
+                    40%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Impact & Benefits</h2>
+        <div class="row g-4 mb-5">
+          <div class="col-md-6 col-lg-3">
+            <div
+              class="impact-card"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  var(--primary) 0%,
+                  var(--primary-dark) 100%
+                );
+              "
+            >
+              <h3><i class="fas fa-chart-line me-2"></i>Economic Impact</h3>
+              <p>
+                Reduces onion storage losses by 30-40%, increasing farmer income
+                and stabilizing market prices.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div
+              class="impact-card"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  var(--teal) 0%,
+                  #00695c 100%
+                );
+              "
+            >
+              <h3><i class="fas fa-leaf me-2"></i>Environmental Benefits</h3>
+              <p>
+                Eco-friendly ethylene control replaces toxic chemicals,
+                supporting SDG goals.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div
+              class="impact-card"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  var(--secondary) 0%,
+                  #f57c00 100%
+                );
+              "
+            >
+              <h3><i class="fas fa-users me-2"></i>Social Impact</h3>
+              <p>
+                Empowers farmers with affordable technology and ensures
+                year-round onion availability.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div
+              class="impact-card"
+              style="
+                background: linear-gradient(
+                  135deg,
+                  var(--accent) 0%,
+                  #0d47a1 100%
+                );
+              "
+            >
+              <h3>
+                <i class="fas fa-microchip me-2"></i>Technological Advancement
+              </h3>
+              <p>
+                AI-driven IoT automation for predictive storage and real-time
+                monitoring.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="chart-container">
+              <canvas id="marketChart"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="chart-container">
+              <canvas id="benefitsChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="py-5 bg-light">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Live Storage Monitoring</h2>
+        <div class="row g-4 mb-5">
+          <div class="col-md-6 col-lg-4">
+            <div class="metric-card">
+              <h5>Ethylene Level</h5>
+              <div class="metric-value text-primary">--</div>
+              <span class="metric-status status-warning"
+                >Connection Request</span
+              >
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="metric-card">
+              <h5>Temperature</h5>
+              <div class="metric-value text-info">--</div>
+              <span class="metric-status status-warning"
+                >Connection Request</span
+              >
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="metric-card">
+              <h5>Humidity</h5>
+              <div class="metric-value text-success">--</div>
+              <span class="metric-status status-normal"
+                >Connection Request</span
+              >
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="metric-card">
+              <h5>KMnO4 Temperature</h5>
+              <div class="metric-value text-secondary">-- °C</div>
+              <span class="metric-status status-normal"
+                >Connection Request</span
+              >
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="metric-card">
+              <h5>Pump Status</h5>
+              <div class="metric-value text-purple">--</div>
+              <span class="metric-status status-active"
+                >Connection Request</span
+              >
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <div class="metric-card">
+              <h5>Mist System</h5>
+              <div class="metric-value text-teal">--</div>
+              <span class="metric-status status-active"
+                >Connection Request</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-6">
+            <div class="chart-container">
+              <canvas id="ethyleneChart"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="chart-container">
+              <canvas id="tempChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">What Farmers Say</h2>
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="testimonial-card">
+              <div class="testimonial-text">
+                "This technology has transformed how we store onions. Our losses
+                have reduced significantly, and we can now get better prices in
+                the market."
+              </div>
+              <div class="client-info">
+                <div class="client-avatar">RS</div>
+                <div>
+                  <h6>Rajesh Singh</h6>
+                  <p class="text-muted">Farmer, Maharashtra</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-card">
+              <div class="testimonial-text">
+                "The remote monitoring feature is a game-changer. I can check
+                storage conditions from my phone and take action if needed."
+              </div>
+              <div class="client-info">
+                <div class="client-avatar">PK</div>
+                <div>
+                  <h6>Priya Kumar</h6>
+                  <p class="text-muted">Agricultural Officer, UP</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="testimonial-card">
+              <div class="testimonial-text">
+                "Finally, an affordable solution for small farmers like me. The
+                low operational cost makes it accessible to everyone."
+              </div>
+              <div class="client-info">
+                <div class="client-avatar">AS</div>
+                <div>
+                  <h6>Anil Sharma</h6>
+                  <p class="text-muted">Farmer, Gujarat</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partners -->
+    <!-- <section class="py-5 bg-light">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">Our Partners</h2>
+        <div class="row align-items-center justify-content-center">
+          <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
+            <img
+              src="https://via.placeholder.com/120x60?text=SIH"
+              alt="SIH"
+              class="img-fluid partner-logo"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
+            <img
+              src="https://via.placeholder.com/120x60?text=AgriTech"
+              alt="AgriTech"
+              class="img-fluid partner-logo"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
+            <img
+              src="https://via.placeholder.com/120x60?text=Govt"
+              alt="Government"
+              class="img-fluid partner-logo"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
+            <img
+              src="https://via.placeholder.com/120x60?text=Research"
+              alt="Research"
+              class="img-fluid partner-logo"
+            />
+          </div>
+          <div class="col-6 col-md-4 col-lg-2 text-center mb-4">
+            <img
+              src="https://via.placeholder.com/120x60?text=Farmers"
+              alt="Farmers"
+              class="img-fluid partner-logo"
+            />
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+      <div class="container">
+        <h2 class="section-title text-center mb-5">About Tech-Teerandaz</h2>
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <h3 class="mb-4">Our Mission</h3>
+            <p class="mb-4">
+              We are a team of passionate innovators participating in Smart
+              India Hackathon 2025, dedicated to solving real-world agricultural
+              problems through technology.
+            </p>
+            <p class="mb-4">
+              Our solution, Kand Sanrakshan, addresses the critical issue of
+              post-harvest onion losses through an affordable, IoT-enabled
+              storage system.
+            </p>
+            <div class="row text-center">
+              <div class="col-4">
+                <h4 class="text-primary">30-40%</h4>
+                <p>Reduction in Losses</p>
+              </div>
+              <div class="col-4">
+                <h4 class="text-success">6-8 Weeks</h4>
+                <p>Extended Shelf Life</p>
+              </div>
+              <div class="col-4">
+                <h4 class="text-info">20-30%</h4>
+                <p>Energy Savings</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <img
+              src="Assets/team.jpg"
+              alt="Team"
+              class="img-fluid rounded"
+              style="max-height: 400px"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 mb-4">
+            <h5><i class="fas fa-seedling me-2"></i>Kand Sanrakshan</h5>
+            <p>
+              Smart storage solutions for onions to reduce post-harvest losses
+              and increase farmer income.
+            </p>
+            <div class="social-icons mt-4">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-2 mb-4">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled">
+              <li><a href="#home">Home</a></li>
+              <li><a href="#problem">Problem</a></li>
+              <li><a href="#solution">Solution</a></li>
+              <li><a href="#impact">Impact</a></li>
+              <li><a href="#dashboard">Dashboard</a></li>
+            </ul>
+          </div>
+          <div class="col-lg-3 mb-4">
+            <h5>Contact Us</h5>
+            <ul class="list-unstyled">
+              <li>
+                <i class="fas fa-envelope me-2"></i> info@kandsanrakshan.com
+              </li>
+              <li><i class="fas fa-phone me-2"></i> +91 98765 43210</li>
+              <li>
+                <i class="fas fa-map-marker-alt me-2"></i> Tech-Teerandaz, SIH
+                2025
+              </li>
+            </ul>
+          </div>
+          <div class="col-lg-3 mb-4">
+            <h5>Newsletter</h5>
+            <p>Subscribe to get updates on our progress</p>
+            <div class="input-group">
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Your email"
+              />
+              <button class="btn btn-accent" type="button">Subscribe</button>
+            </div>
+          </div>
+        </div>
+        <hr class="my-4" style="border-color: rgba(255, 255, 255, 0.1)" />
+        <div class="text-center">
+          <p>
+            &copy; 2025 Kand Sanrakshan - Tech-Teerandaz. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top">
+      <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Login to Your Account</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="loginEmail" class="form-label">Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="loginEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="loginPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="loginPassword"
+                  required
+                />
+              </div>
+              <div class="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="rememberMe"
+                />
+                <label class="form-check-label" for="rememberMe"
+                  >Remember me</label
+                >
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+            <div class="text-center mt-3">
+              <p>
+                Don't have an account?
+                <a
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#signupModal"
+                  data-bs-dismiss="modal"
+                  >Sign up here</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Create an Account</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="signupName" class="form-label">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="signupName"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="signupEmail" class="form-label"
+                  >Email address</label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="signupEmail"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="signupPassword" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="signupPassword"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="signupConfirm" class="form-label"
+                  >Confirm Password</label
+                >
+                <input
+                  type="password"
+                  class="form-control"
+                  id="signupConfirm"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="userType" class="form-label">User Type</label>
+                <select class="form-select" id="userType" required>
+                  <option value="" disabled selected>Select User Type</option>
+                  <option value="farmer">Farmer</option>
+                  <option value="distributor">Distributor</option>
+                  <option value="researcher">Researcher</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                Sign Up
+              </button>
+            </form>
+            <div class="text-center mt-3">
+              <p>
+                Already have an account?
+                <a
+                  href="#"
+                  data-bs-toggle="modal"
+                  data-bs-target="#loginModal"
+                  data-bs-dismiss="modal"
+                  >Login here</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Charts
+        // Loss Chart
+        const lossCtx = document.getElementById("lossChart").getContext("2d");
+        const lossChart = new Chart(lossCtx, {
+          type: "doughnut",
+          data: {
+            labels: ["Storage Loss (35%)", "Remaining Onions (65%)"],
+            datasets: [
+              {
+                data: [35, 65],
+                backgroundColor: ["#FF9800", "#4CAF50"],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: "bottom",
+              },
+              title: {
+                display: true,
+                text: "Current Onion Storage Loss",
+                font: {
+                  size: 16,
+                },
+              },
+            },
+          },
+        });
+
+        // Market Chart
+        const marketCtx = document
+          .getElementById("marketChart")
+          .getContext("2d");
+        const marketChart = new Chart(marketCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ],
+            datasets: [
+              {
+                label: "Onion Prices (₹/kg)",
+                data: [25, 30, 40, 60, 45, 35, 30, 25, 20, 25, 40, 50],
+                borderColor: "#2E7D32",
+                backgroundColor: "rgba(46, 125, 50, 0.1)",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Monthly Onion Price Fluctuations in India (2024)",
+                font: {
+                  size: 16,
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: "Price (₹/kg)",
+                },
+              },
+            },
+          },
+        });
+
+        // Benefits Chart
+        const benefitsCtx = document
+          .getElementById("benefitsChart")
+          .getContext("2d");
+        const benefitsChart = new Chart(benefitsCtx, {
+          type: "bar",
+          data: {
+            labels: [
+              "Reduced Losses",
+              "Extended Shelf Life",
+              "Energy Savings",
+              "Cost Reduction",
+            ],
+            datasets: [
+              {
+                label: "Improvement (%)",
+                data: [35, 75, 25, 40],
+                backgroundColor: ["#2E7D32", "#FF9800", "#2196F3", "#9C27B0"],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Benefits of Kand Sanrakshan",
+                font: {
+                  size: 16,
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Improvement (%)",
+                },
+              },
+            },
+          },
+        });
+
+        // Ethylene Chart
+        const ethyleneCtx = document
+          .getElementById("ethyleneChart")
+          .getContext("2d");
+        const ethyleneChart = new Chart(ethyleneCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "00:00",
+              "02:00",
+              "04:00",
+              "06:00",
+              "08:00",
+              "10:00",
+              "12:00",
+              "14:00",
+              "16:00",
+              "18:00",
+              "20:00",
+              "22:00",
+            ],
+            datasets: [
+              {
+                label: "Ethylene Level (ppm)",
+                data: [
+                  350, 340, 335, 332, 330, 331, 333, 335, 337, 340, 342, 341,
+                ],
+                borderColor: "#FF9800",
+                backgroundColor: "rgba(255, 152, 0, 0.1)",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Ethylene Levels Over 24 Hours",
+                font: {
+                  size: 16,
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: "Ethylene (ppm)",
+                },
+              },
+            },
+          },
+        });
+
+        // Temperature Chart
+        const tempCtx = document.getElementById("tempChart").getContext("2d");
+        const tempChart = new Chart(tempCtx, {
+          type: "line",
+          data: {
+            labels: [
+              "00:00",
+              "02:00",
+              "04:00",
+              "06:00",
+              "08:00",
+              "10:00",
+              "12:00",
+              "14:00",
+              "16:00",
+              "18:00",
+              "20:00",
+              "22:00",
+            ],
+            datasets: [
+              {
+                label: "Temperature (°C)",
+                data: [30, 29, 28, 28, 29, 31, 33, 34, 33, 32, 31, 30],
+                borderColor: "#2196F3",
+                backgroundColor: "rgba(33, 150, 243, 0.1)",
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              title: {
+                display: true,
+                text: "Temperature Variation Over 24 Hours",
+                font: {
+                  size: 16,
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: false,
+                title: {
+                  display: true,
+                  text: "Temperature (°C)",
+                },
+              },
+            },
+          },
+        });
+
+        // Scroll to Top Button
+        const scrollTop = document.querySelector(".scroll-top");
+
+        window.addEventListener("scroll", function () {
+          if (window.pageYOffset > 300) {
+            scrollTop.classList.add("active");
+          } else {
+            scrollTop.classList.remove("active");
+          }
+        });
+
+        scrollTop.addEventListener("click", function () {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        });
+
+        // Simulate real-time data updates
+        function updateMetrics() {
+          const ethyleneValue = document.querySelector(
+            ".metric-card:nth-child(1) .metric-value"
+          );
+          const tempValue = document.querySelector(
+            ".metric-card:nth-child(2) .metric-value"
+          );
+
+          // Simulate small fluctuations
+          const currentEthylene = parseInt(ethyleneValue.textContent);
+          const currentTemp = parseFloat(tempValue.textContent);
+
+          const newEthylene =
+            currentEthylene + Math.floor(Math.random() * 5) - 2;
+          const newTemp = (currentTemp + (Math.random() * 0.4 - 0.2)).toFixed(
+            2
+          );
+
+          ethyleneValue.textContent =
+            Math.max(320, Math.min(360, newEthylene)) + " ppm";
+          tempValue.textContent = newTemp + " °C";
+
+          // Update status indicators based on values
+          const ethyleneStatus = document.querySelector(
+            ".metric-card:nth-child(1) .metric-status"
+          );
+          const tempStatus = document.querySelector(
+            ".metric-card:nth-child(2) .metric-status"
+          );
+
+          if (newEthylene > 340) {
+            ethyleneStatus.textContent = "High";
+            ethyleneStatus.className = "metric-status status-warning";
+          } else {
+            ethyleneStatus.textContent = "Normal";
+            ethyleneStatus.className = "metric-status status-normal";
+          }
+
+          if (newTemp > 32) {
+            tempStatus.textContent = "High";
+            tempStatus.className = "metric-status status-warning";
+          } else {
+            tempStatus.textContent = "Normal";
+            tempStatus.className = "metric-status status-normal";
+          }
+        }
+
+        // Update metrics every 10 seconds
+        setInterval(updateMetrics, 10000);
+
+        // Form submissions
+        document.querySelectorAll("form").forEach((form) => {
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Form submitted successfully!");
+            const modal =
+              bootstrap.Modal.getInstance(
+                document.getElementById("loginModal")
+              ) ||
+              bootstrap.Modal.getInstance(
+                document.getElementById("signupModal")
+              );
+            if (modal) modal.hide();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
